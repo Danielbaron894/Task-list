@@ -1,0 +1,76 @@
+
+<button class="addButton">
+    <a routerLink="/add-task" style="text-decoration:none">Add Task</a>
+</button>
+<div class="main">
+    <h1>Customers To Do List</h1>
+
+    <router-outlet></router-outlet>
+
+
+    <div class="btn-wrapper">
+        <button
+          class="btn btn-menu"
+          [class.active]="filter === 'all'"
+          (click)="filter = 'all'">
+          All
+        </button>
+      
+        <button
+          class="btn btn-menu"
+          [class.active]="filter === 'active'"
+          (click)="filter = 'active'">
+          To Do
+        </button>
+      
+        <button
+          class="btn btn-menu"
+          [class.active]="filter === 'done'"
+          (click)="filter = 'done'">
+          Done
+        </button>
+      </div>
+      
+        <h2>{{items.length}} <span *ngIf="items.length === 1; else elseBlock">item</span>
+        <ng-template #elseBlock>items</ng-template></h2>
+        
+        
+      
+        <ul>
+          <li *ngFor="let item of items; let i = index; trackBy: trackByFn">
+            <div class="item">
+              <input
+                [id]="'checkbox-' + item._id"
+                type="checkbox"
+                [checked]="item.isDone"
+                (change)="toggleIsDone(item._id, i)"
+              />
+              <label [for]="'checkbox-' + item._id">{{ item.title }}</label>
+              <label [for]="item.date">{{ item.date | date: 'dd-MM-yyyy' }}</label>
+      
+              <div class="customer-details">
+                <div *ngIf="item.customerId">
+                  <p><strong>Name:</strong> {{ getCustomerName(item.customerId) }}</p>
+                  <p><strong>Occupation:</strong> {{ getCustomerOccupation(item.customerId) }}</p>
+                  <p><strong>Email:</strong> {{ getCustomerEmail(item.customerId) }}</p>
+                  <p><strong>Phone:</strong> {{ getCustomerPhone(item.customerId) }}</p>
+                </div>
+              </div>  
+          
+              <div class="btn-wrapper" *ngIf="!item.isEditing">
+                <button class="btn" (click)="editItem(i)">Edit</button>
+                <button class="btn btn-warn" (click)="removeTask(item._id, i)">Delete</button>
+              </div>
+          
+              <div *ngIf="item.isEditing">
+                <input class="sm-text-input" placeholder="edit item" [value]="item.title" #editedItem>
+                <div class="btn-wrapper">
+                  <button class="btn" (click)="cancelEdit(item)">Cancel</button>
+                  <button class="btn btn-save" (click)="saveItem(item._id, i, editedItem.value, item)">Save</button>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      

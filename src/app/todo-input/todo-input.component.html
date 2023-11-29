@@ -1,0 +1,30 @@
+<button class="backButton">
+<a routerLink="/tasks" style="text-decoration:none">Back to Task List</a>
+</button>
+
+<div class="main">
+    <label for="addTaskInput">What would you like to do today?</label>
+
+  <input
+  #newItem
+  placeholder="add an item"
+  (keyup.enter)="addTask(newItem.value, newDate.value, newCustomerId.value); newItem.value = ''; newDate.value = ''; newCustomerId.value = ''"
+  class="lg-text-input"
+  id="addTaskInput"
+/>
+
+<input
+  #newDate
+  type="date"
+  placeholder="select a date"
+  class="lg-text-input"
+/>
+
+<select #newCustomerId class="lg-text-input">
+  <option value="" disabled selected>Select a customer</option>
+  <option *ngFor="let customer of allCustomers" [value]="customer._id">
+    {{ customer.name }}
+  </option>
+</select>
+
+<button class="btn-primary" (click)="addTask(newItem.value, newDate.value, newCustomerId.value); newItem.value = ''; newDate.value = ''; newCustomerId.value = ''">Add</button>
